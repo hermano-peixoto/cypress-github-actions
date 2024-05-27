@@ -46,7 +46,9 @@ jobs:
         run: npm install cypress --save-dev
 
       - name: Run Cypress Tests
-        run: npx cypress run
+        run: |
+          curl -s http://localhost:3000/users
+          npx cypress run
         env:
           CYPRESS_baseUrl: http://localhost:3000
 
