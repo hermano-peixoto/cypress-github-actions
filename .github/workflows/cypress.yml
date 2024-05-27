@@ -40,9 +40,13 @@ jobs:
           fi
           echo "Web service is ready."
 
+      - name: Create Cypress Configuration
+        run: |
+          echo '{"integrationFolder": "cypress/e2e/integration"}' > cypress.json
+
       - name: Install Cypress
         run: npm install cypress --save-dev
-        
+
       - name: Run Cypress Tests
         run: npx cypress run
         env:
