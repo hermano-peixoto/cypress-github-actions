@@ -6,17 +6,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    services:
-      web:
-        image: node:20
-        ports:
-          - 3000:3000
-        options: --health-cmd="curl --fail http://localhost:3000 || exit 1" --health-interval=10s --health-timeout=5s --health-retries=50
-        env:
-          PORT: 3000
-        volumes:
-          - .:/workspace
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -28,13 +17,13 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
-        working-directory: /workspace
 
       - name: Start Application
         run: |
+          echo "Starting the application..."
           npm start &
+          echo $! > application_pid.txt
           sleep 10
-        working-directory: /workspace
 
       - name: Wait for Web Service to be fully ready
         run: |
@@ -45,13 +34,11 @@ jobs:
           done
           echo "Web service is ready."
 
-      - name: Print Docker Logs
-        run: |
-          CONTAINER_ID=$(docker ps -q -f "ancestor=node:20")
-          docker logs $CONTAINER_ID
-
       - name: Run Cypress Tests
         run: npx cypress run
         env:
           CYPRESS_baseUrl: http://localhost:3000
-        working-directory: /workspace
+
+      - name: Stop Application
+        run: |
+          kill $(cat application_pid.txt)
