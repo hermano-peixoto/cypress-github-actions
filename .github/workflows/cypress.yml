@@ -53,15 +53,14 @@ jobs:
           CYPRESS_baseUrl: http://localhost:3000
 
       - name: Upload Cypress Artifacts
-              uses: actions/upload-artifact@v3
-              with:
-                name: cypress-artifacts
-                path: |
-                  cypress/screenshots
-                  cypress/videos
-                  cypress/results
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-artifacts
+          path: |
+            cypress/screenshots
+            cypress/videos
+            cypress/results
 
       - name: Stop Application
         run: |
           kill $(cat application_pid.txt)
-          
