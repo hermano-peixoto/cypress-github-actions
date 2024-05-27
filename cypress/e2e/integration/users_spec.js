@@ -1,4 +1,3 @@
-
 describe('Users API', () => {
     it('fetches the list of users', () => {
         // Set up the intercept before making the request
@@ -10,8 +9,14 @@ describe('Users API', () => {
             ]);
         }).as('getUsers');
 
+        // Log to ensure intercept is set
+        cy.log('Intercept set for GET /users');
+
         // Make a request to the /users endpoint
         cy.request('/users').as('usersRequest');
+
+        // Log to ensure request is made
+        cy.log('Request made to /users');
 
         // Wait for the intercept and then assert the response
         cy.wait('@getUsers').then((xhr) => {
