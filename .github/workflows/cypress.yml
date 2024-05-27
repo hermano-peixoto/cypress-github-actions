@@ -11,7 +11,7 @@ jobs:
         image: node:20
         ports:
           - 3000:3000
-        options: --health-cmd="curl --fail http://localhost:3000 || exit 1" --health-interval=10s --health-timeout=5s --health-retries=30
+        options: --health-cmd="curl --fail http://localhost:3000 || exit 1" --health-interval=10s --health-timeout=5s --health-retries=50
         env:
           PORT: 3000
         volumes:
@@ -31,20 +31,24 @@ jobs:
         working-directory: /workspace
 
       - name: Start Application
-        run: npm start &
+        run: |
+          npm start &
+          sleep 10
         working-directory: /workspace
 
       - name: Wait for Web Service to be fully ready
         run: |
           echo "Waiting for the web service to fully start..."
-          until curl -s -o /dev/null -w '%{http_code}' http://localhost:3000 | grep -q "200"; do
+          until [ $(curl -s -o /dev/null -w '%{http_code}' http://localhost:3000) -eq 200 ]; do
             echo "Web service is not ready yet..."
             sleep 10
           done
           echo "Web service is ready."
 
       - name: Print Docker Logs
-        run: docker logs $(docker ps -q -f "ancestor=node:20")
+        run: |
+          CONTAINER_ID=$(docker ps -q -f "ancestor=node:20")
+          docker logs $CONTAINER_ID
 
       - name: Run Cypress Tests
         run: npx cypress run
