@@ -40,6 +40,7 @@ jobs:
             exit 1
           fi
           echo "Web service is ready."
+          curl -s http://localhost:3000
 
       - name: Install Cypress
         run: npm install cypress --save-dev
