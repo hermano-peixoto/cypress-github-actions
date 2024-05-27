@@ -40,6 +40,9 @@ jobs:
           fi
           echo "Web service is ready."
 
+      - name: Install Cypress
+        run: npm install cypress --save-dev
+        
       - name: Run Cypress Tests
         run: npx cypress run
         env:
