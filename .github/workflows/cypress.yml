@@ -1,3 +1,23 @@
+
+
+      - name: Create Cypress Configuration
+        run: |
+          mkdir -p cypress/e2e
+          echo "module.exports = { e2e: { setupNodeEvents(on, config) {}, baseUrl: 'http://localhost:3000', supportFile: false } };" > cypress.config.js
+
+      - name: Install Cypress
+        run: npm install cypress --save-dev
+
+      - name: Run Cypress Tests
+        run: npx cypress run
+        env:
+          CYPRESS_baseUrl: http://localhost:3000
+
+      - name: Stop Application
+        run: |
+          kill $(cat application_pid.txt)
+
+
 name: Cypress Tests
 
 on: [push, pull_request]
@@ -39,11 +59,6 @@ jobs:
             exit 1
           fi
           echo "Web service is ready."
-
-      - name: Create Cypress Configuration
-        run: |
-          mkdir -p cypress/e2e
-          echo "module.exports = { e2e: { setupNodeEvents(on, config) {}, baseUrl: 'http://localhost:3000', supportFile: false } };" > cypress.config.js
 
       - name: Install Cypress
         run: npm install cypress --save-dev
