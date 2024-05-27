@@ -7,7 +7,6 @@ describe('Users API', () => {
             { id: 3, name: 'Mocked Charlie' }
         ]).as('getUsers');
 
-        cy.visit('http://localhost:3000');
         cy.request('/users').its('body').should('have.length', 3);
         cy.get('@getUsers').should((xhr) => {
             expect(xhr.response.body[0].name).to.equal('Mocked Alice');
