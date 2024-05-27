@@ -30,7 +30,7 @@ jobs:
         run: |
           echo "Waiting for the web service to fully start..."
           retries=30
-          until [ $retries -eq 0 ] || curl -s http://localhost:3000 > /dev/null; do
+          until [ $retries -eq 0 ] || curl -s http://localhost:3000/users > /dev/null; do
             echo "Web service is not ready yet..."
             retries=$((retries - 1))
             sleep 10
@@ -40,7 +40,7 @@ jobs:
             exit 1
           fi
           echo "Web service is ready."
-          curl -s http://localhost:3000
+          curl -s http://localhost:3000/users
 
       - name: Install Cypress
         run: npm install cypress --save-dev
