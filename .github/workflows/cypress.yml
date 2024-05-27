@@ -11,7 +11,7 @@ jobs:
         image: node:20
         ports:
           - 3000:3000
-        options: --health-cmd="curl --fail http://localhost:3000 || exit 1" --health-interval=10s --health-timeout=5s --health-retries=20
+        options: --health-cmd="curl --fail http://localhost:3000 || exit 1" --health-interval=10s --health-timeout=5s --health-retries=30
         env:
           PORT: 3000
         volumes:
@@ -43,7 +43,7 @@ jobs:
               exit 0
             fi
             echo "Waiting..."
-            sleep 5
+            sleep 10
           done
           echo "Web service did not start in time"
           exit 1
